@@ -482,11 +482,13 @@ if ( ! class_exists( 'BFI_Thumb_1_3' ) ) {
 
 	        // #3 check the original path
 	        } else {
-                $file_mime_type = mime_content_type(str_replace($home_url, substr($home_dir, 0, -1), $url));
-                if (strpos($file_mime_type, 'image/') !== false) {
+                $origin_file = str_replace($home_url, substr($home_dir, 0, -1), $url);
+                if (file_exists($origin_file) && 
+                    strpos(mime_content_type($origin_file), 'image/') !== false)
+                {
                     $rel_path = str_replace( $home_url, '', $url );
                     $img_path = $home_dir . $rel_path;
-	            }
+                }
 	        }
 
 	        // Fail if we can't find the image in our WP local directory

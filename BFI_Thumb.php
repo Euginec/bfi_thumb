@@ -466,6 +466,8 @@ if ( ! class_exists( 'BFI_Thumb_1_3' ) ) {
 	        $upload_url = $upload_info['baseurl'];
 	        $theme_url = get_template_directory_uri();
 	        $theme_dir = get_template_directory();
+	        $home_dir = ABSPATH;
+	        $home_url = get_home_url();
 
 	        // find the path of the image. Perform 2 checks:
 	        // #1 check if the image is in the uploads folder
@@ -477,6 +479,16 @@ if ( ! class_exists( 'BFI_Thumb_1_3' ) ) {
 	        } else if ( strpos( $url, $theme_url ) !== false ) {
 	            $rel_path = str_replace( $theme_url, '', $url );
 	            $img_path = $theme_dir . $rel_path;
+
+	        // #3 check the original path
+	        } else {
+                $origin_file = str_replace($home_url, substr($home_dir, 0, -1), $url);
+                if (file_exists($origin_file) && 
+                    strpos(mime_content_type($origin_file), 'image/') !== false)
+                {
+                    $rel_path = str_replace( $home_url, '', $url );
+                    $img_path = $home_dir . $rel_path;
+                }
 	        }
 
 	        // Fail if we can't find the image in our WP local directory
